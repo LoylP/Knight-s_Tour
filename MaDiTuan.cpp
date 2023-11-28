@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <stdio.h>
 #include <string>
 #include <sstream>
@@ -18,25 +18,22 @@ int n; //kích thước bàn cờ (boardsize)
 int squareSize = 50;
 
 void Output() { //Xuất từng tọa độ đường đi
-    for (int k = 1; k <= n * n; k++) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++)
-            {
-                if (A[i][j] == k)
-                {
-                    cout << "A(" << i << ", " << j << ")," << "  ";
-                }
-            }
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (A[i][j] < 10)
+                cout << " " << A[i][j] << " ";
+            else
+                cout << A[i][j] << " ";
         }
+        cout << endl;
     }
     cout << endl;
 }
 
 void GiaoDien() {      //Giao Diện Bàn Cờ
-
     //Bàn cờ n*n
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
             int x = j * squareSize;
             int y = i * squareSize;
             if ((i + j) % 2 == 0) {
@@ -50,17 +47,17 @@ void GiaoDien() {      //Giao Diện Bàn Cờ
     }
     for (int k = 1; k <= n * n; k++) {
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++)
-            {
+            for (int j = 0; j < n; j++) {
                 if (A[i][j] == k)
                 {
+                    cout << "(" << i << ", " << j << ") ->" << " ";
                     // Vẽ quân mã tại vị trí (i, j)
-                    setfillstyle(SOLID_FILL, RED);   //Màu đỏ là đang xét
-                    int knightX = i * squareSize + squareSize / 2;
-                    int knightY = j * squareSize + squareSize / 2;
+                    setfillstyle(SOLID_FILL, RED);   //Màu đỏ là ô đang xét
+                    int knightX = j * squareSize + squareSize / 2;
+                    int knightY = i * squareSize + squareSize / 2;
                     fillellipse(knightX, knightY, squareSize / 4, squareSize / 4);
                     Sleep(800);
-                    setfillstyle(SOLID_FILL, WHITE); //Màu trắng là xét xong vị trí hiện tại
+                    setfillstyle(SOLID_FILL, WHITE); //Màu trắng là ô xét xong vị trí hiện tại
                     fillellipse(knightX, knightY, squareSize / 4, squareSize / 4);
 
                     //Đánh dấu thứ tự vào ô đã xét
@@ -69,22 +66,24 @@ void GiaoDien() {      //Giao Diện Bàn Cờ
                     string strNumber = ss.str();
                     char charNumber[100];
                     strcpy_s(charNumber, sizeof(charNumber), strNumber.c_str()); // Sao chép chuỗi từ strNumber vào charNumber
-                    outtextxy(i * squareSize + squareSize / 9, j * squareSize + squareSize / 9, charNumber);
+                    outtextxy(j * squareSize + squareSize / 9, i * squareSize + squareSize / 9, charNumber);
                 }
             }
         }
     }
+    cout << "END. " << endl;
     getch();
     closegraph();
 }
 
 void Move(int x, int y) {
-    ++step;   //Tăng bước đi
+    step++;   //Tăng bước đi
     A[x][y] = step;    //Đánh dấu đã đi vào ô này
     for (int i = 0; i < 8; i++) {
         if (step == n * n) {   //Kiểm tra quân mã đã đi hết bàn cờ chưa
-            cout << "\nToa do cac diem lan luot la: " << endl;
+            cout << "\nThu tu quan ma di tren ban co la: " << endl;
             Output();
+            cout << "Hanh trinh quan ma: " << " ";
             GiaoDien();
             exit(0);
         }
@@ -93,7 +92,7 @@ void Move(int x, int y) {
         if (u >= 0 && u < n && v >= 0 && v < n && A[u][v] == 0)   //Ràng buộc
             Move(u, v);
     }
-    --step;   //Trả lại bước đi trước đó
+    step--;   //Trả lại bước đi trước đó
     A[x][y] = 0;  //Trả lại trạng thái ô trước đó
 }
 
@@ -114,7 +113,7 @@ int main()
     Move(a, b);
 
     //Nếu không có đường đi thỏa 
-    cout << "Quan Ma khong the di chuyen het ban co voi vi tri ban dau: x = " << a << ", y = " << b << endl;
+    cout << "Quan Ma khong the di chuyen het ban co";
 
     return 0;
 }
